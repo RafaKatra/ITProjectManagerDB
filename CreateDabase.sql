@@ -1,0 +1,316 @@
+CREATE TABLE "CUSTOMERS" (
+	"Oid" INT NOT NULL,
+	"Name" NVARCHAR2(100) NOT NULL,
+	"VatNumber" NVARCHAR2(10),
+	"TaxOffice" NVARCHAR2(100),
+	"Street" NVARCHAR2(100),
+	"Area" NVARCHAR2(100),
+	"ZipCode" NVARCHAR2(10),
+	"Country" INT,
+	"State" INT,
+	"Town" INT,
+	"Phone" NVARCHAR2(100),
+	"Email" NVARCHAR2(100),
+	"Customers_Category" INT,
+	constraint CUSTOMERS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "CUSTOMERS_OID_SEQ";
+
+CREATE trigger "BI_CUSTOMERS_OID"
+  before insert on "CUSTOMERS"
+  for each row
+begin
+  select "CUSTOMERS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "CUSTOMERS_CATEGORIES" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	constraint CUSTOMERS_CATEGORIES_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "CUSTOMERS_CATEGORIES_OID_SEQ";
+
+CREATE trigger "BI_CUSTOMERS_CATEGORIES_OID"
+  before insert on "CUSTOMERS_CATEGORIES"
+  for each row
+begin
+  select "CUSTOMERS_CATEGORIES_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "EMPLOYEE_CATEGORIES" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	constraint EMPLOYEE_CATEGORIES_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "EMPLOYEE_CATEGORIES_OID_SEQ";
+
+CREATE trigger "BI_EMPLOYEE_CATEGORIES_OID"
+	before insert on "EMPLOYEE_CATEGORIES"
+	for each row
+    	begin
+		select "EMPLOYEE_CATEGORIES_OID_SEQ".nextval into :NEW."Oid" from dual;
+    	end;
+
+/
+CREATE TABLE "EMPLOYEES" (
+	"Oid" INT NOT NULL,
+	"Name" NVARCHAR2(255) NOT NULL,
+	"Street" NVARCHAR2(100),
+	"Area" NVARCHAR2(100),
+	"ZipCode" NVARCHAR2(10),
+	"Country" INT,
+	"State" INT,
+	"Town" INT,
+	"Employee_Category" INT,
+	"Phone" NVARCHAR2(100),
+	"Email" NVARCHAR2(100),
+	"Salary" DECIMAL NOT NULL,
+	"Hour_Salary" DECIMAL NOT NULL,
+	constraint EMPLOYEES_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "EMPLOYEES_OID_SEQ";
+
+CREATE trigger "BI_EMPLOYEES_OID"
+	before insert on "EMPLOYEES"
+	for each row
+	begin
+		select "EMPLOYEES_OID_SEQ".nextval into :NEW."Oid" from dual;
+	end;
+
+
+
+/
+CREATE TABLE "COUNTRIES" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	constraint COUNTRIES_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "COUNTRIES_OID_SEQ";
+
+CREATE trigger "BI_COUNTRIES_OID"
+  before insert on "COUNTRIES"
+  for each row
+begin
+  select "COUNTRIES_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+CREATE TABLE "STATES" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	"Country" INT NOT NULL,
+	constraint STATES_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "STATES_OID_SEQ";
+
+CREATE trigger "BI_STATES_OID"
+  before insert on "STATES"
+  for each row
+begin
+  select "STATES_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+CREATE TABLE "TOWNS" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	"State" INT NOT NULL,
+	constraint TOWNS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "TOWNS_OID_SEQ";
+
+CREATE trigger "BI_TOWNS_OID"
+  before insert on "TOWNS"
+  for each row
+begin
+  select "TOWNS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+CREATE TABLE "EMPLOYEES_PROJECTS" (
+	"Oid" INT NOT NULL,
+	"Employee" INT NOT NULL,
+	"Project" INT NOT NULL,
+	constraint EMPLOYEES_PROJECTS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "EMPLOYEES_PROJECTS_OID_SEQ";
+
+CREATE trigger "BI_EMPLOYEES_PROJECTS_OID"
+  before insert on "EMPLOYEES_PROJECTS"
+  for each row
+begin
+  select "EMPLOYEES_PROJECTS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+CREATE TABLE "PROJECTS_STATUS" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	constraint PROJECTS_STATUS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "PROJECTS_STATUS_OID_SEQ";
+
+CREATE trigger "BI_PROJECTS_STATUS_OID"
+  before insert on "PROJECTS_STATUS"
+  for each row
+begin
+  select "PROJECTS_STATUS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+CREATE TABLE "PROJECTS" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	"Customer" INT NOT NULL,
+	"FromDate" DATE NOT NULL,
+	"EndDate" DATE NOT NULL,
+	"Project_Status" INT NOT NULL,
+	"Active" INT NOT NULL,
+	"Budget" DECIMAL NOT NULL,
+	constraint PROJECTS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "PROJECTS_OID_SEQ";
+
+CREATE trigger "BI_PROJECTS_OID"
+  before insert on "PROJECTS"
+  for each row
+begin
+  select "PROJECTS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "SUBPROJECTS" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(255) NOT NULL,
+	"Project" INT NOT NULL,
+	"StartDate" DATE NOT NULL,
+	"EndDate" DATE NOT NULL,
+	"Completed" INT NOT NULL,
+	constraint SUBPROJECTS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "SUBPROJECTS_OID_SEQ";
+
+CREATE trigger "BI_SUBPROJECTS_OID"
+  before insert on "SUBPROJECTS"
+  for each row
+begin
+  select "SUBPROJECTS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "TASKS" (
+	"Oid" INT NOT NULL,
+	"Description" NVARCHAR2(100) NOT NULL,
+	"SubProject" INT,
+	"Date" DATE NOT NULL,
+	"Work_Hours" INT NOT NULL,
+	"Remark" NVARCHAR2(255),
+	"Employee" INT NOT NULL,
+	constraint TASKS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "TASKS_OID_SEQ";
+
+CREATE trigger "BI_TASKS_OID"
+  before insert on "TASKS"
+  for each row
+begin
+  select "TASKS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "LEADS" (
+	"Oid" INT NOT NULL,
+	"Date" DATE NOT NULL,
+	"Title" NVARCHAR2(100) NOT NULL,
+	"Project" INT NOT NULL,
+	"Employee" INT NOT NULL,
+	"Remark" NVARCHAR2(255) NOT NULL,
+	"File" BLOB,
+	constraint LEADS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "LEADS_OID_SEQ";
+
+CREATE trigger "BI_LEADS_OID"
+  before insert on "LEADS"
+  for each row
+begin
+  select "LEADS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "LEADS_STATUS" (
+	"Oid" INT NOT NULL,
+	"Project_Status" INT NOT NULL,
+	"Remark" NVARCHAR2(255),
+	"Leads" INT NOT NULL,
+	"Project" INT NOT NULL,
+	constraint LEADS_STATUS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "LEADS_STATUS_OID_SEQ";
+
+CREATE trigger "BI_LEADS_STATUS_OID"
+  before insert on "LEADS_STATUS"
+  for each row
+begin
+  select "LEADS_STATUS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+/
+CREATE TABLE "PROJECT_CONTACTS" (
+	"Oid" INT NOT NULL,
+	"Project" INT NOT NULL,
+	"Employee" INT NOT NULL,
+	constraint PROJECT_CONTACTS_PK PRIMARY KEY ("Oid"));
+
+CREATE sequence "PROJECT_CONTACTS_OID_SEQ";
+
+CREATE trigger "BI_PROJECT_CONTACTS_OID"
+  before insert on "PROJECT_CONTACTS"
+  for each row
+begin
+  select "PROJECT_CONTACTS_OID_SEQ".nextval into :NEW."Oid" from dual;
+end;
+
+
+/
+ALTER TABLE "CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_fk0" FOREIGN KEY ("Customers_Category") REFERENCES "CUSTOMERS_CATEGORIES"("Oid");
+ALTER TABLE "CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_fk1" FOREIGN KEY ("Country") REFERENCES "COUNTRIES"("Oid");
+ALTER TABLE "CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_fk2" FOREIGN KEY ("State") REFERENCES "STATES"("Oid");
+ALTER TABLE "CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_fk3" FOREIGN KEY ("Town") REFERENCES "TOWNS"("Oid");
+
+ALTER TABLE "STATES" ADD CONSTRAINT "STATES_fk0" FOREIGN KEY ("Country") REFERENCES "COUNTRIES"("Oid");
+
+ALTER TABLE "TOWNS" ADD CONSTRAINT "TOWNS_fk0" FOREIGN KEY ("State") REFERENCES "STATES"("Oid");
+
+ALTER TABLE "PROJECTS" ADD CONSTRAINT "PROJECTS_fk0" FOREIGN KEY ("Customer") REFERENCES "CUSTOMERS"("Oid");
+ALTER TABLE "PROJECTS" ADD CONSTRAINT "PROJECTS_fk1" FOREIGN KEY ("Project_Status") REFERENCES "PROJECTS_STATUS"("Oid");
+
+ALTER TABLE "SUBPROJECTS" ADD CONSTRAINT "SUBPROJECTS_fk0" FOREIGN KEY ("Project") REFERENCES "PROJECTS"("Oid");
+
+ALTER TABLE "TASKS" ADD CONSTRAINT "TASKS_fk0" FOREIGN KEY ("SubProject") REFERENCES "SUBPROJECTS"("Oid");
+ALTER TABLE "TASKS" ADD CONSTRAINT "TASKS_fk1" FOREIGN KEY ("Employee") REFERENCES "EMPLOYEES"("Oid");
+
+ALTER TABLE "EMPLOYEES" ADD CONSTRAINT "EMPLOYEES_fk0" FOREIGN KEY ("Employee_Category") REFERENCES "EMPLOYEE_CATEGORIES"("Oid");
+ALTER TABLE "EMPLOYEES" ADD CONSTRAINT "EMPLOYEES_fk1" FOREIGN KEY ("Country") REFERENCES "COUNTRIES"("Oid");
+ALTER TABLE "EMPLOYEES" ADD CONSTRAINT "EMPLOYEES_fk2" FOREIGN KEY ("State") REFERENCES "STATES"("Oid");
+ALTER TABLE "EMPLOYEES" ADD CONSTRAINT "EMPLOYEES_fk3" FOREIGN KEY ("Town") REFERENCES "TOWNS"("Oid");
+
+ALTER TABLE "EMPLOYEES_PROJECTS" ADD CONSTRAINT "EMPLOYEES_PROJECTS_fk0" FOREIGN KEY ("Project") REFERENCES "PROJECTS"("Oid");
+ALTER TABLE "EMPLOYEES_PROJECTS" ADD CONSTRAINT "EMPLOYEES_PROJECTS_fk1" FOREIGN KEY ("Employee") REFERENCES "EMPLOYEES"("Oid");
+
+ALTER TABLE "LEADS" ADD CONSTRAINT "LEADS_fk0" FOREIGN KEY ("Project") REFERENCES "PROJECTS"("Oid");
+ALTER TABLE "LEADS" ADD CONSTRAINT "LEADS_fk1" FOREIGN KEY ("Employee") REFERENCES "EMPLOYEES"("Oid");
+
+ALTER TABLE "LEADS_STATUS" ADD CONSTRAINT "LEADS_STATUS_fk0" FOREIGN KEY ("Project_Status") REFERENCES "PROJECTS_STATUS"("Oid");
+ALTER TABLE "LEADS_STATUS" ADD CONSTRAINT "LEADS_STATUS_fk1" FOREIGN KEY ("Leads") REFERENCES "LEADS"("Oid");
+ALTER TABLE "LEADS_STATUS" ADD CONSTRAINT "LEADS_STATUS_fk2" FOREIGN KEY ("Project") REFERENCES "PROJECTS"("Oid");
+
+ALTER TABLE "PROJECT_CONTACTS" ADD CONSTRAINT "PROJECT_CONTACTS_fk0" FOREIGN KEY ("Project") REFERENCES "PROJECTS"("Oid");
+ALTER TABLE "PROJECT_CONTACTS" ADD CONSTRAINT "PROJECT_CONTACTS_fk1" FOREIGN KEY ("Employee") REFERENCES "EMPLOYEES"("Oid");

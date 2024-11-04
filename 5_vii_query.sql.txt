@@ -1,0 +1,25 @@
+SELECT PR."Description" "Project", PR."Budget" "Budget",
+subq.workhours "Project WorkHours",
+subq.projectCost "Project Cost",
+EMP."Name" "Employee",
+sum(TS."Work_Hours") "Employee Work Hours",
+sum(TS."Work_Hours")/subq.workhours*100 "Work Hours Employee on Project %",
+sum(TS."Work_Hours" * EMP."Hour_Salary") "Employee Work Hours Cost on Project"
+
+FROM SUBPROJECTS SUB
+INNER JOIN TASKS TS ON TS."SubProject"=SUB."Oid"
+INNER JOIN PROJECTS PR ON PR."Oid"=SUB."Project"
+INNER JOIN EMPLOYEES EMP ON EMP."Oid"=TS."Employee"
+join 
+    (
+        select S."Project" ProjectOid,  sum(ST."Work_Hours") workhours,
+            sum(ST."Work_Hours" *  E."Hour_Salary") projectCost
+        from TASKS ST
+        INNER JOIN SUBPROJECTS S ON S."Oid"=ST."SubProject"
+        INNER JOIN EMPLOYEES E ON E."Oid"=ST."Employee"
+        group by S."Project"
+     ) subq on subq.projectoid=PR."Oid"
+        
+group by PR."Description",PR."Budget",EMP."Name",subq.workhours,subq.projectcost,EMP."Salary"
+order by 1,5;
+
